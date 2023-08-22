@@ -10,7 +10,7 @@ parser.add_argument(
         type=str, help='Work directory')
 parser.add_argument(
         '--data_folder', 
-        default='Sample_data',
+        default='sample_data',
         type=str, help='Data folder name')
 parser.add_argument(
         '--protein_pdb_id', 
