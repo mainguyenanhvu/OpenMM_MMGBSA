@@ -1,7 +1,7 @@
 import os
 import argparse
 
-from helper import download_pdb_from_rcsb
+from helper import download_pdb_from_rcsb, generate_pdb_4tleap, generate_tleap
 
 parser = argparse.ArgumentParser(description='MMGBSA')
 parser.add_argument(
@@ -77,6 +77,28 @@ def main():
     complex_pdb = os.path.join(data_path, 'complex.pdb')
     os.system('cat {} {} > {}'.format(protein_top_crd_pdb, ligand_amber_pdb, complex_pdb))
 
+    # Convert complex pdb into Amber pdb
+    complex_amber_pdb = os.path.join(data_path, 'complex.amber.pdb')
+    os.system('pdb4amber {} > {}'.format(complex_pdb, complex_amber_pdb)) 
+
+    # Fix complex amber pdb
+    complex_amber_fix_pdb = os.path.join(data_path, 'complex.fixed.amber.pdb')
+    os.system('pdbfixer {} --output {}'.format(complex_amber_pdb, complex_amber_fix_pdb))
+    complex_amber_fix_reduceH_pdb = os.path.join(data_path, 'complex.fixed.amber_reduceH.pdb')
+    os.system('reduce {} > {}'.format(complex_amber_fix_pdb, complex_amber_fix_reduceH_pdb))
+    complex_amber_fix_reduceH_refix_pdb = os.path.join(data_path, 'complex.fixed.amber_reduceH.refix.pdb')
+    os.system('pdb4amber -i {} -o {}'.format(complex_amber_fix_reduceH_pdb, complex_amber_fix_reduceH_refix_pdb))
+
+    complex_tleap_pdb = os.path.join(data_path, 'complex_tleap.pdb')
+    generate_pdb_4tleap(complex_amber_fix_reduceH_refix_pdb, complex_tleap_pdb)
+
+    tleap_in = os.path.join(data_path, 'tleap.in')
+    topology_amber_prmtop = os.path.join(data_path, 'complex.prmtop')
+    coordinate_amber_inpcrd = os.path.join(data_path, 'complex.inpcrd')
+    generate_tleap(complex_tleap_pdb, ligand_prepi, ligand_frcmod,  tleap_in, topology_amber_prmtop, coordinate_amber_inpcrd)
+    tleap_out = os.path.join(data_path, 'tleap.out')
+    os.system('tleap -s -f {} > {}'.format(tleap_in, tleap_out))
+    os.system('tail -n 500 {}'.format(tleap_out))
 
 if __name__ == "__main__":
     main()
