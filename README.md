@@ -12,7 +12,7 @@ Or:
 # Usage
 We can check the pipeline with sample data by using the command:
 ```
-python MMGBSA.py --protein_pdb_file "protein.pdb" --ligand_pdb_file "ligand.pdb"
+python MMGBSA.py --protein_pdb_file "protein.pdb" --ligand_pdb_file "ligand.pdb" --simulation_platform "CUDA" --AMBERHOME "~/"
 ```
 
 # OpenMM_MMGBSA
