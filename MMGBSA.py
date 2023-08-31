@@ -217,7 +217,7 @@ def calculating_a_pair_protein_ligand(output_path, protein_prmtop_inpcrd, input_
     # Simulation by openMM
     trajectory_dcd_file, log_file, checkpointReporter_file = simulation_openMM(output_path, complex_topology_amber_prmtop, complex_coordinate_amber_inpcrd,
                                                                            args.rigidWater, args.ewaldErrorTolerance, args.constraintTolerance,
-                                                                           args.simulation_step, args.equilibrationSteps, args.platform_name,
+                                                                           args.simulation_step, args.equilibrationSteps, args.simulation_platform,
                                                                            args.dcdReporter_step, args.dataReporter_step, args.checkpointReporter_step)
 
     os.environ['AMBERHOME'] = args.AMBERHOME
