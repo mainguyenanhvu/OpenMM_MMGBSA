@@ -104,13 +104,16 @@ args = parser.parse_args()
 
 
 def protein_process(output_path, input_protein_pdb_path):
+    print("Protein processing......")
     # Fix your protein with PDBfixer with OpenMM Setup
+    print("Fix your protein with PDBfixer with OpenMM Setup")
     fix_protein_pdb = os.path.join(output_path, input_protein_pdb_path.split(
         '/')[-1].split('.')[-1] + '_fixed.pdb')
     os.system(
         'pdbfixer {} --output {}'.format(input_protein_pdb_path, fix_protein_pdb))
 
     # Fix protein pdb
+    print("Fix protein pdb")
     protein_amber_fix_pdb = os.path.join(
         output_path, 'protein.fixed.amber.pdb')
     os.system('pdbfixer {} --output {}'.format(fix_protein_pdb,
@@ -258,14 +261,17 @@ def main():
 
     if input_ligand_sdf_path is not None:
         if count_ligands(input_ligand_sdf_path) > 1:
-            ligand_pdb_file_list = split_ligands(input_ligand_sdf_path)
+            ligand_pdb_file_list = split_ligands(data_path, input_ligand_sdf_path)
             for input_ligand_pdb_path in ligand_pdb_file_list:
                 ligand_name_i = input_ligand_pdb_path.split(
                     '/')[-1].split('.')[0]
                 output_path_i = os.path.join(output_path, ligand_name_i)
                 mkdir_if_missing(output_path_i)
-                calculating_a_pair_protein_ligand(
-                    output_path_i, protein_prmtop_inpcrd, input_ligand_pdb_path)
+                try:
+                    calculating_a_pair_protein_ligand(
+                        output_path_i, protein_prmtop_inpcrd, input_ligand_pdb_path)
+                except Exception as e:
+                    print()
         else:
             input_ligand_pdb_path = input_ligand_sdf_path.replace(
                 '.sdf', '.pdb')
