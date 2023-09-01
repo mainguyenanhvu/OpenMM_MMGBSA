@@ -22,22 +22,23 @@ def count_ligands(sdf_file):
     return ligand_count
 
 
-def split_ligands(sdf_file):
+def split_ligands(data_path, sdf_file):
     ligand_pdb_file_list = []
     suppl = Chem.SDMolSupplier(sdf_file)
+    ligand_count = 0
     for mol in suppl:
         if mol is None:
             continue
-        for i, ligand in enumerate(mol.GetMolFrags()):
-            # ligand_file = f"{mol.GetProp('_Name')}_ligand_{i+1}.pdb"
+        ligand_count += 1
+        for ligand in Chem.GetMolFrags(mol, asMols=True):
+            print(mol.GetProp('_Name'))
             ligand_file = os.path.join(
-                data_path, '{}_ligand_{}.pdb'.format(mol.GetProp('_Name'), i+1))
+                data_path, '{}_ligand_{}.pdb'.format(mol.GetProp('_Name'), ligand_count+1))
             ligand_pdb_file_list.append(ligand_file)
             writer = Chem.PDBWriter(ligand_file)
             writer.write(ligand)
             writer.close()
     return ligand_pdb_file_list
-
 
 def download_pdb_from_rcsb(pdb_id, data_path):
     input_protein_pdb_path = os.path.join(data_path, pdb_id+'.pdb')
