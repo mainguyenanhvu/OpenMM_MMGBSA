@@ -270,8 +270,9 @@ def main():
                 try:
                     calculating_a_pair_protein_ligand(
                         output_path_i, protein_prmtop_inpcrd, input_ligand_pdb_path)
+                    print('Successful running for {}'.format(ligand_name_i))
                 except Exception as e:
-                    print()
+                    print('Failed running for {}'.format(ligand_name_i))
         else:
             input_ligand_pdb_path = input_ligand_sdf_path.replace(
                 '.sdf', '.pdb')
@@ -279,9 +280,12 @@ def main():
                       input_ligand_pdb_path))
             calculating_a_pair_protein_ligand(
                 output_path, protein_prmtop_inpcrd, input_ligand_pdb_path)
+            print('Successful running for {}'.format(input_ligand_pdb_path))
+
     else:
         calculating_a_pair_protein_ligand(
             output_path, protein_prmtop_inpcrd, input_ligand_pdb_path)
+        print('Successful running for {}'.format(input_ligand_pdb_path))
 
 
 if __name__ == "__main__":
