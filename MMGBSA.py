@@ -236,11 +236,11 @@ def calculating_a_pair_protein_ligand(output_path, protein_prmtop_inpcrd, input_
     trajectory_mdcrd = os.path.join(output_path, "trajectory.mdcrd")
     os.system("cpptraj -p {} -y {} -x {}".format(complex_topology_amber_prmtop, trajectory_dcd_file, trajectory_mdcrd))
 
-    os.system('ante-MMPBSA.py  -p {} -c com.prmtop -r rec.prmtop -l ligand.prmtop -n :LIG --radii {}'.format(
-        complex_topology_amber_prmtop, mbondi))
+    os.system('ante-MMPBSA.py  -p {} -c {} -r rec.prmtop -l ligand.prmtop -n :LIG --radii {}'.format(
+        complex_topology_amber_prmtop, complex_topology_amber_prmtop, mbondi))
     # MMPBSA = "MMPBSA.py -O -i mmpbsa.in -o " + str(final_mmpbsa) +  ".dat -sp " + str(pdb_ref) + " -cp com.prmtop -rp rec.prmtop -lp ligand.prmtop -y "  + str(trajectory_dcd)
-    os.system("MMPBSA.py -O -i {} -o {} -sp {} -cp com.prmtop -rp rec.prmtop -lp ligand.prmtop -y ".format(
-        mmpbsa_infile, final_mmpbsa, complex_topology_amber_prmtop, trajectory_mdcrd))
+    os.system("MMPBSA.py -O -i {} -o {} -sp {} -cp {} -rp rec.prmtop -lp ligand.prmtop -y ".format(
+        mmpbsa_infile, final_mmpbsa, complex_topology_amber_prmtop, complex_topology_amber_prmtop, trajectory_mdcrd))
 
 
 def main():
